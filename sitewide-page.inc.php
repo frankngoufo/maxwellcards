@@ -8,8 +8,8 @@ Define these globals as constants */
 
 /*
 //change depending whether you're testing or developing
-define("PATH_ROOT", $_SERVER['DOCUMENT_ROOT']."/ececp/" );
-define("PATH_HOME", "http://localhost/ececp/");
+define("PATH_ROOT", $_SERVER['DOCUMENT_ROOT']."/phpvisa/" );
+define("PATH_HOME", "http://localhost/phpvisa/");
 
 */
 define("PATH_ROOT", $_SERVER['DOCUMENT_ROOT']."/" );
@@ -18,13 +18,10 @@ define("PATH_HOME", 'https://'.$_SERVER['HTTP_HOST']."/");
 
 define("PATH_ME", PATH_HOME."me/");
 define("PATH_COMMON", PATH_ROOT."common/");
-define("PATH_COMMON_LAYOUT", PATH_COMMON."layouts/");
 define("PATH_COMMON_MODULE", PATH_COMMON."modules/");
 define("PATH_COMMON_DATA_MANAGER", PATH_COMMON."data-managers/");
-define("PATH_LAYOUT", "layouts/");
-define("PATH_MODULE", "modules/");
-define("PATH_DATA_MANAGER", "data-managers/");
 define("PATH_RESSOURCE_IMG", PATH_ROOT."/base/img/");// Passed as resource for uploads
+define("PATH_IMG", PATH_HOME."/base/img");
 define("API_KEY", "YOUR_API_KEY");
 
 
@@ -55,6 +52,12 @@ class SitePage extends Page {
 		return $content;
 	}
 
+	/*
+	Every access to the API for a logged in user must contain a reset token.
+	The reset token resets upon each request the user makes to the application.
+	This protects against session hijacking. What this function does is simply check if the reset token matches what is saved
+	in the database
+	*/
 	public function verify_user() {
 		$this->load_args["verify_user"] = array(
 			"SELECT id FROM users WHERE id = ? AND reset_token = ?",
@@ -67,7 +70,7 @@ class SitePage extends Page {
 	}
 	
 	// Format Time
-	public function formatTime($dt_time) {
+	public function format_time($dt_time) {
 		$nowTime = new DateTime();
 		$savedTime = new DateTime($dt_time);
 		$interval = $savedTime->diff($nowTime);

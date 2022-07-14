@@ -20,17 +20,6 @@ Class CreateMSPage extends SectionPage {
 		$this->dm->get_data( $this->load_args['user'], $this->load_data['user'], $this->load_stat['user'] );
 	}
 
-	private function is_user_in_cur_meeting() {
-		$this->load_args['u_in_cm'] = array(
-			"SELECT * FROM user_meetings WHERE meetingId = ? AND userId = ?",
-			array($_POST['meetingId'], $this->userId)
-		);
-		$this->load_data['u_in_cm'] = array();
-		$this->load_stat['u_in_cm'] = array();
-		$this->dm->get_data( $this->load_args['u_in_cm'], $this->load_data['u_in_cm'], $this->load_stat['u_in_cm'] );
-
-	}
-
 	public function save_data() {
 		$this->save_args['user_meeting'] = array(
 			array(
@@ -62,17 +51,7 @@ Class CreateMSPage extends SectionPage {
 			} else { // User exists
 				$this->userId = $this->load_data['user'][0]['id']; // To be used later
 			}
-
-			$this->is_user_in_cur_meeting(); // Is user already added to this meeting? Always false for non-existent users
-
-			if (empty($this->load_data['u_in_cm'])) { // User isn't part of current meeting; add them
-				$this->save_data();
-				if (empty($this->check_db_errors($this->save_stat))) {
-					echo json_encode(array('success' => 1));
-				}
-			} else { // User is already part of current meeting
-				echo json_encode(array('user_in_meeting' => 1));
-			}
+			echo json_encode(array('success' => 1));
 		}
 	}
 
