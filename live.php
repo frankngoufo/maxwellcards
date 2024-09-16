@@ -11,7 +11,7 @@
  session_start();
 
 class Live  {
-  public $live = false; // Change based on state of app
+  public $live = true; // Change based on state of app
 
   /**
    * Return base URL for app API
@@ -19,7 +19,7 @@ class Live  {
    * @return string
    */
   public function getHome() {
-    return $this->live ? 'https://dev.bleaglee.com/' : 'http://localhost/waste2reward/';
+    return $this->live ? 'https://drone.bleaglee.com/' : 'http://localhost/bleaglee-drone/';
   }
 
   /**
@@ -28,7 +28,7 @@ class Live  {
    * @return string
    */
   public function getRoot() {
-    return $this->live ? $_SERVER['DOCUMENT_ROOT'].'/app/' : $_SERVER['DOCUMENT_ROOT'].'/waste2rewards-backend/';
+    return $this->live ? $_SERVER['DOCUMENT_ROOT'].'/' : $_SERVER['DOCUMENT_ROOT'].'/bleaglee-drone/';
   }
 
   /**
@@ -40,16 +40,16 @@ class Live  {
     $dbo = array(
       'host'      => 'localhost',
       'user'      => 'root',
-      'password'  => 'growthisconstant',
-      'database'  => 'waste2rewards'
+      'password'  => '',
+      'database'  => ''
     );
 
     if($this->live) {
       $dbo = array(
         'host'      => 'localhost',
-        'user'      => 'bleagle1_waste2rewards',
-        'password'  => 'PuZEtPIey',
-        'database'  => 'bleagle1_waste2rewards'
+        'user'      => '',
+        'password'  => '',
+        'database'  => ''
       );
     }
 
