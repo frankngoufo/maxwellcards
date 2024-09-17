@@ -2,7 +2,7 @@
 /**
  * Initiates a connection to the database. Return database connection object
  *
- * @author  Abi Hilary
+ * @author  Cedric Che-Azeh
  * @license Blogvisa Terms of use
  */
 
@@ -72,6 +72,7 @@ class DB
   public function query( &$data ) {
     $prepared_query = $data['query'][0];
     $param_array = $data['query'][1];
+    $keyword = $data['query'][2];
 
     // Normalize. Parameters should be within an array
     if (!is_array($param_array)) {
@@ -81,14 +82,14 @@ class DB
     $sql = $this->dbh->prepare( $prepared_query );
 
     if($sql->execute( $param_array )) {
-      $stat = [];
+      $data['stat'] = [];
 
       // Assign data based on whether query was single or multiple; condition introduced for compatibility
       $data['data'] = $this->order_results($sql);
     } else {
       //Assign error info to status variable. also return empty array as data received
       $data['stat'] = $sql->errorInfo();
-      $data = [];
+      $data['data'] = [];
     }
 
     if(!empty($this->dbh->lastInsertId())) {
