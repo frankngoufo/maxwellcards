@@ -72,7 +72,6 @@ class DB
   public function query( &$data ) {
     $prepared_query = $data['query'][0];
     $param_array = $data['query'][1];
-    $keyword = $data['query'][2];
 
     // Normalize. Parameters should be within an array
     if (!is_array($param_array)) {
