@@ -15,23 +15,7 @@ Class Route {
 
         $requests = array(
             'signin'                => '/signin.php',
-            'get-orders'            => '/me/get-orders.php',
-            'prod-clients'          => '/me/prod-clients.php',
-            'submit-order'          => '/me/submit-order.php',
-            'completed'             => '/me/completed.php',
-            'download'              => '/me/download.php',
-            'modify'                => '/me/modify.php',
-            'get-products'          => '/me/get-products.php',
-            'otp'                   => '/submit-otp.php',
-            'pay'                   => '/me/pay.php',
-            'callback'              => '/me/pay-callback.php',
             'save-user'             => '/me/save-user.php',
-            'get-cities'            => '/get-cities.php',
-            'app-update'            => '/app-update.php',
-            'get-countries'         => '/get-countries.php',
-            'save-address'          => '/me/save-address.php',
-            'admin-signin'          => '/admin-signin.php',
-            'admin-privileges'      => '/admin/privileges.php',
         );
 
         if(array_key_exists($_REQUEST['route'], $requests)) {
