@@ -73,6 +73,19 @@ class API{
 		$this->getKeys();
 		$this->verifyKey();
 	}
+
+	/**
+	 * Check for any database errors in the queries we did in this session
+	 * @return boolean, whether there are errors or no
+	 * */
+	public function db_errors_exist() {
+		foreach ($this->query_data as $key => $value) {
+			if(!empty($value["stat"])) {
+				return true;
+			}
+		}
+		return false;
+	}
     
 	/**
 	 * Perform a query on the database. 
