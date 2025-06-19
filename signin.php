@@ -1,7 +1,5 @@
 <?php
 require_once __DIR__."/site-variables.php";
-require __DIR__ . '/vendor/autoload.php';
-use Twilio\Rest\Client;
 
 Class Endpoint extends API {
     
