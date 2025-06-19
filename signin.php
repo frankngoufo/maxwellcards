@@ -32,6 +32,12 @@ Class Endpoint extends API {
     }
 
     public function get_content() {
+      if(empty($_POST)) {
+        $this->respond(array(
+          "error" => 'No sigin credentials specified'
+          )
+        );
+      }
         $this->load_data();
         if (empty($this->query_data["user"]["stat"])) {
 

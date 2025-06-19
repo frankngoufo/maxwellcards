@@ -11,7 +11,7 @@
  session_start();
 
 class Live  {
-  public $live = true; // Change based on state of app
+  public $live = false; // True for production, false for development
 
   /**
    * Return base URL for app API
@@ -40,8 +40,8 @@ class Live  {
     $dbo = array(
       'host'      => 'localhost',
       'user'      => 'root',
-      'password'  => '',
-      'database'  => ''
+      'password'  => 'growthisconstant',
+      'database'  => 'phpvisa'
     );
 
     if($this->live) {
