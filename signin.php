@@ -28,7 +28,7 @@ class Endpoint extends API {
 
 	private function save_new_user($tel, $email, $otp) {
 		$this->query(
-			"INSERT INTO users (stat,tel,email,first_name,otp,otp_time,last_name) VALUES(?,?,?,?, NOW(),?)",
+			"INSERT INTO users (stat,tel,email,first_name,otp,otp_time,last_name) VALUES(?,?,?,?,?, NOW(),?)",
 			array(0, $tel, $email, "No Name", $otp, ""),
 			"new_user"
 		);
@@ -77,7 +77,7 @@ class Endpoint extends API {
 			} else {
 
         		// User doesn't exist, create them and send OTP
-				$this->save_new_user($_POST["tel"], $otp);
+				$this->save_new_user($_POST["tel"], $_POST["email"], $otp);
 				$this->respond(array("user" => $_SESSION['lastInsertId'], 'response' => json_decode($response)));
 			}
 		}
