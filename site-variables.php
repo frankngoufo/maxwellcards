@@ -295,7 +295,7 @@ class API{
      * */
     protected function get_user($userId) {
     	$this->query(
-    		"SELECT id, first_name, last_name, email, tel, otp, address, country, city, UNIX_TIMESTAMP(otp_time) AS otp_time FROM users WHERE id = ?",
+    		"SELECT id, first_name, last_name, email, tel, otp, address, city, UNIX_TIMESTAMP(otp_time) AS otp_time FROM users WHERE id = ?",
     		$userId,
     		"user"
     	);
@@ -374,7 +374,7 @@ class API{
 		if($this->live->live) {
 			mail($to, $subject, $msg, $headers);
 		} else {
-			file_put_contents("email.txt", $msg);
+			file_put_contents("email.htm", $msg);
 		}
 
 	}
