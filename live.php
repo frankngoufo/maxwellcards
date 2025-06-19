@@ -19,7 +19,7 @@ class Live  {
    * @return string
    */
   public function getHome() {
-    return $this->live ? 'https://drone.bleaglee.com/' : 'http://localhost/bleaglee-drone/';
+    return $this->live ? 'https://phpvisa.com/' : 'http://localhost/phpvisa/';
   }
 
   /**
@@ -28,7 +28,7 @@ class Live  {
    * @return string
    */
   public function getRoot() {
-    return $this->live ? $_SERVER['DOCUMENT_ROOT'].'/' : $_SERVER['DOCUMENT_ROOT'].'/bleaglee-drone/';
+    return $this->live ? $_SERVER['DOCUMENT_ROOT'].'/' : $_SERVER['DOCUMENT_ROOT'].'/phpvisa/';
   }
 
   /**

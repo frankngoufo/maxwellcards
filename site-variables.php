@@ -19,19 +19,19 @@ class API{
 	 * API Keys
 	 * @var string
 	 */
-    public $keys;
+	public $keys;
 
 	/**
 	 * State of the app (live or local)
 	 * @var string
 	 */
-    public $live;
+	public $live;
 
 	/**
 	 * root resource of the app
 	 * @var string
 	 */
-    public $root;
+	public $root;
 
 	/**
 	 * Base URL of API endpoint
@@ -72,6 +72,11 @@ class API{
 		$this->getRoot();
 		$this->getKeys();
 		$this->verifyKey();
+
+		// Enable error reporting on development servers
+		if($this->live->live)
+			require_once __DIR__ . '/error-reporting.php';
+		
 	}
 
 	/**
@@ -86,7 +91,7 @@ class API{
 		}
 		return false;
 	}
-    
+	
 	/**
 	 * Perform a query on the database. 
 	 * @param string $query: the query string
@@ -111,7 +116,7 @@ class API{
 		);
 		$this->db->query($this->query_data[$array_key]);
 	}
-    
+	
 	/**
 	 * Get the API keys of app from database
 	 * Database name: api_keys
@@ -131,7 +136,7 @@ class API{
 		$this->query("SELECT api_key FROM api_keys WHERE ? ORDER BY id ASC LIMIT 1", TRUE, 'random_key');
 		return $this->query_data['random_key']['data'][0]['api_key'];
 	}
-    
+	
 	/**
 	 * Check if API key supplied matches what was sent
 	 * @return void
@@ -181,20 +186,20 @@ class API{
 	 * @return string $encodedSource: the encoded string
 	 */
 
-    public function base64url($source) {
+	public function base64url($source) {
       // Encode in classical base64
-      $encodedSource = base64_encode($source);
+		$encodedSource = base64_encode($source);
 
       // Remove padding equal characters
-      $encodedSource = preg_replace('/=+$/', '', $encodedSource);
+		$encodedSource = preg_replace('/=+$/', '', $encodedSource);
 
       // Replace characters according to base64url specifications
-      $encodedSource = preg_replace('/\+/', '-', $encodedSource);
-      $encodedSource = preg_replace('/\//', '_', $encodedSource);
+		$encodedSource = preg_replace('/\+/', '-', $encodedSource);
+		$encodedSource = preg_replace('/\//', '_', $encodedSource);
 
       // Return the base64 encoded string
-      return $encodedSource;
-    }
+		return $encodedSource;
+	}
 
     /**
      * Generate JWT
@@ -206,20 +211,20 @@ class API{
 
         // Generate JWT access token
         // First define token header
-        $header = array(
-          'alg' => 'HS256',
-          'typ' => 'JWT',
-        );
+    	$header = array(
+    		'alg' => 'HS256',
+    		'typ' => 'JWT',
+    	);
 
         // Calculate the issued at and expiration dates
-        $iat = time();
+    	$iat = time();
         $exp = $iat + 2592e+6; // Now plus 30 days
 
         // Define token payload
         $p = array(
-          'iat' => $iat,
-          'iss' => 'your_app_name',
-          'exp' => $exp,
+        	'iat' => $iat,
+        	'iss' => 'your_app_name',
+        	'exp' => $exp,
         );
         $payload = array_merge($p, $payl);
 
@@ -239,7 +244,7 @@ class API{
         // Build and return the token
         return $encodedHeader.".".$encodedPayload.".".$signature;
 
-    }
+      }
 
     /**
      * Verify JWT
@@ -253,18 +258,18 @@ class API{
      * */
 
     public function verifyJWTToken($token, $admin = false) {
-      
+    	
       // Split the token into parts
-      if(!$token) {
-      	return;
-      }
-      $parts = explode(".", $token);
-      $header = $parts[0];
-      $payload = $parts[1];
-      $signature = $parts[2];
+    	if(!$token) {
+    		return;
+    	}
+    	$parts = explode(".", $token);
+    	$header = $parts[0];
+    	$payload = $parts[1];
+    	$signature = $parts[2];
 
       // Re-sign and encode the header and payload using the secret
-      $signatureCheck = $this->base64url(hash_hmac('sha256', $header.".".$payload, $this->jwtSecret));
+    	$signatureCheck = $this->base64url(hash_hmac('sha256', $header.".".$payload, $this->jwtSecret));
 
       // Assign userId to a session
       $user = (array)json_decode(base64_decode($payload)); // First decode payload
@@ -289,12 +294,12 @@ class API{
      * @return array of user's details
      * */
     protected function get_user($userId) {
-        $this->query(
-            "SELECT id, first_name, last_name, email, tel, otp, address, country, city, UNIX_TIMESTAMP(otp_time) AS otp_time FROM users WHERE id = ?",
-            $userId,
-            "user"
-        );
-        return $this->query_data["user"]["data"][0];
+    	$this->query(
+    		"SELECT id, first_name, last_name, email, tel, otp, address, country, city, UNIX_TIMESTAMP(otp_time) AS otp_time FROM users WHERE id = ?",
+    		$userId,
+    		"user"
+    	);
+    	return $this->query_data["user"]["data"][0];
     }
 
     /**
@@ -303,21 +308,21 @@ class API{
      * */
 
     public function curl_request($url, $header, $postfields = array(), $customrequest = "POST") {
-	    $curl = curl_init();
-	    curl_setopt($curl, CURLOPT_URL, $url);
-	    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-	    curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
-	    curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-	    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $customrequest);
-	    curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-	    curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
-	    if(!empty($postfields)) {
-	    	curl_setopt($curl, CURLOPT_POSTFIELDS, $postfields);
-	    }
+    	$curl = curl_init();
+    	curl_setopt($curl, CURLOPT_URL, $url);
+    	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    	curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
+    	curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+    	curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $customrequest);
+    	curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+    	curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
+    	if(!empty($postfields)) {
+    		curl_setopt($curl, CURLOPT_POSTFIELDS, $postfields);
+    	}
 
-	    $response = curl_exec($curl);
-	    curl_close($curl);
-	    return curl_error($curl) ? curl_error($curl) : $response;
+    	$response = curl_exec($curl);
+    	curl_close($curl);
+    	return curl_error($curl) ? curl_error($curl) : $response;
 
     }
 
@@ -331,9 +336,9 @@ class API{
     public function notify($userId, $description, $icon = "notifications-outline") {
     	$this->query(
     		"INSERT INTO notifications(userId, description, icon) VALUES(?,?,?)",
-  			array($userId, $description, $icon),
-  			"notification"
-    		);
+    		array($userId, $description, $icon),
+    		"notification"
+    	);
     }
 
 	/**
@@ -347,21 +352,21 @@ class API{
 	public function send_email($content, $subject, $from, $to) {
 		$msg = <<<EOL
 		<html>
-			<body>
-				<div style="width:95%;max-width:400px;padding:2.5%;background:#ffffff;margin:auto;">
-					<img src="https://zenitheinsurance.com/img/logo.png" alt="Your Company Name" style="width:90%; max-width: 200px; display:block;margin:10px auto;" />
-					<h1 style="text-align:center; color:#212121;">$subject</h1>
-					$content
-					<p style="color:#0099ff;font-size:1.1em;color:#212121;clear:both;padding-top:20px;">
-						Your Company Name<br />
-						Boulevard de la République<br/>
-						face Palais DIKA AKWA (1388 Rue Bebey Eyidi)<br/>
-						(237) 233 43 41 32 / (237) 694 30 82 32
-					</p>
-				</div>
-			</body>
+		<body>
+		<div style="width:95%;max-width:400px;padding:2.5%;background:#ffffff;margin:auto;">
+		<img src="https://phpvisa.com/img/logo.png" alt="Your Company Name" style="width:90%; max-width: 200px; display:block;margin:10px auto;" />
+		<h1 style="text-align:center; color:#212121;">$subject</h1>
+		$content
+		<p style="color:#0099ff;font-size:1.1em;color:#212121;clear:both;padding-top:20px;">
+		Your Company Name<br />
+		Your Company Address<br/>
+		Enter your company Address Hwere<br/>
+		(237) 123 456 789 / (237) 123 456 987
+		</p>
+		</div>
+		</body>
 		</html>
-EOL;
+		EOL;
 		$headers = "From: $from"."\r\n".
 		"Reply-to: $from" ."\r\n" .
 		'MIME-Version: 1.0' ."\r\n" .
