@@ -12,6 +12,14 @@ require_once __DIR__ . '/access-control.php';
 require_once __DIR__ . '/live.php';
 require_once __DIR__ . '/db.php';
 
+define('FLUTTERWAVE_PUBLIC_KEY', 'FLWPUBK-5cb0f29f29b44ba594e1c58300623b4a-X');
+define('FLUTTERWAVE_SECRET_KEY', 'FLWSECK_TEST-d480f423be9bea54dd2456ed19f4811a-X');
+define('FLUTTERWAVE_ENCRYPTION_KEY', 'a6ef8b421d666bae8c16b50e');
+define('EVERSEND_CLIENT_ID', 'cBQkMdbvUknbKU9tjs0wvJ2HmZvxJvVi');
+define('EVERSEND_CLIENT_SECRET', '34bl32EjhfSdNUnb6uibpbSEK9nSMkkVPdwT0k_nqAhN21d7NAjRlouywr2J6a0r');
+define('SMS_ID', 'AC7d16c4b44ab305cbc020e0d4fb76cb77');
+define('SMS_TOKEN', 'a104732f1a1451c895e2474e08bc81c8');
+
 
 class API{
 
@@ -65,13 +73,13 @@ class API{
 		$this->live = new Live();
 		$this->db = new DB($this->live->getDBParams()); // Conenct to database
 		$this->query_data = array();
-		$this->keys = array();
+		//$this->keys = array();
 		$this->jwtSecret = '38nsGHQuidlkfh18bzh4890UjwyHqhfg3sncbvsskjfghqopzxmq83jnbduduwej';
 
 		$this->getHome();
 		$this->getRoot();
-		$this->getKeys();
-		$this->verifyKey();
+		//$this->getKeys();
+		//$this->verifyKey();
 
 		// Enable error reporting on development servers
 		if($this->live->live)
@@ -112,7 +120,7 @@ class API{
 		$this->query_data[$array_key] = array(
 			'query' => array($query, $param),
 			'data'  => array(),
-			'stat'	=> array()
+			//'stat'	=> array()
 		);
 		$this->db->query($this->query_data[$array_key]);
 	}
@@ -123,25 +131,25 @@ class API{
 	 * Database Columns: id(INT), api_key(TINYTEXT), date_created(DATETIME), last_modified(DATETIME), uses(BIGINT)
 	 * @return void
 	 */
-	public function getKeys() {
+	/*public function getKeys() {
 		$this->query( "SELECT * FROM api_keys WHERE api_key = ?", $_REQUEST['key'], 'keys' );
 		$this->keys = $this->query_data['keys']['data'];
-	}
+	}*/
 
 	/**
 	 * Get random key from database
 	 * @return random key from database
 	 * */
-	public function get_random_key() {
+	/*public function get_random_key() {
 		$this->query("SELECT api_key FROM api_keys WHERE ? ORDER BY id ASC LIMIT 1", TRUE, 'random_key');
 		return $this->query_data['random_key']['data'][0]['api_key'];
-	}
+	}*/
 	
 	/**
 	 * Check if API key supplied matches what was sent
 	 * @return void
 	 */
-	public function verifyKey() {
+	/*public function verifyKey() {
 		if(empty($_REQUEST['key'])) {
 			$this->respond(array('error' => 'Invalid Key'));
 		}
@@ -150,7 +158,7 @@ class API{
 		if(empty($this->keys)) {
 			$this->respond(array('error' => 'Invalid Key'));
 		}
-	}
+	}*/
 	
 	/**
 	 * Get home page URL
@@ -284,9 +292,11 @@ class API{
      * Generate random string
      * @param length: length of string
      * */
-    public function generate_random_string($length) {
-    	return bin2hex(random_bytes($length));
-    }
+    public function generate_random_string($length = 6) {
+    $min = pow(10, $length - 1); // Ex: 100000
+    $max = pow(10, $length) - 1; // Ex: 999999
+    return strval(random_int($min, $max));
+}
 
     /**
      * Get user's details
@@ -295,7 +305,7 @@ class API{
      * */
     protected function get_user($userId) {
     	$this->query(
-    		"SELECT id, first_name, last_name, email, tel, otp, address, city, UNIX_TIMESTAMP(otp_time) AS otp_time FROM users WHERE id = ?",
+    		"SELECT id, first_name, last_name, email, telephone, otp, UNIX_TIMESTAMP(otp_time) AS otp_time FROM users WHERE id = ?",
     		$userId,
     		"user"
     	);

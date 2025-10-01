@@ -19,7 +19,7 @@ class Live  {
    * @return string
    */
   public function getHome() {
-    return $this->live ? 'https://phpvisa.com/' : 'http://localhost/phpvisa/';
+    return $this->live ? 'https://phpvisa.com/' : 'http://localhost/maxwellcards/';
   }
 
   /**
@@ -28,7 +28,7 @@ class Live  {
    * @return string
    */
   public function getRoot() {
-    return $this->live ? $_SERVER['DOCUMENT_ROOT'].'/' : $_SERVER['DOCUMENT_ROOT'].'/phpvisa/';
+    return $this->live ? $_SERVER['DOCUMENT_ROOT'].'/' : $_SERVER['DOCUMENT_ROOT'].'/maxwellcards/';
   }
 
   /**
@@ -40,8 +40,8 @@ class Live  {
     $dbo = array(
       'host'      => 'localhost',
       'user'      => 'root',
-      'password'  => 'growthisconstant',
-      'database'  => 'phpvisa'
+      'password'  => 'password',
+      'database'  => 'maxwellcards'
     );
 
     if($this->live) {

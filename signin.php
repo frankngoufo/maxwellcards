@@ -36,10 +36,10 @@ class Endpoint extends API {
 
 	public function get_content() {
 		$this->load_data();
-		if (empty($this->query_data["user"]["stat"])) {
+		if (empty($this->query_data["user"]["statut"])) {
 
       		// Generate OTP
-			$otp = random_int(1000, 9999);
+			$otp = random_int(10000, 99999);
 			$response = '[]';
 
 			if ($_POST['ismobileLogin'] === true) {
@@ -80,6 +80,6 @@ class Endpoint extends API {
 				$this->save_new_user($_POST["tel"], $_POST["email"], $otp);
 				$this->respond(array("user" => $_SESSION['lastInsertId'], 'response' => json_decode($response)));
 			}
-		}
+		}							
 	}
 }

@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . "/../site-variables.php";
 
+
+
 Class SectionVariables extends API {
     
     public function __construct() {
@@ -31,7 +33,7 @@ Class SectionVariables extends API {
     /** 
      * Get header Authorization
      * */
-    private function getAuthorizationHeader(){
+    public function getAuthorizationHeader(){
         $headers = null;
         if (isset($_SERVER['Authorization'])) {
             $headers = trim($_SERVER["Authorization"]);
@@ -50,10 +52,12 @@ Class SectionVariables extends API {
         return $headers;
     }
 
+    
+
     /**
      * get access token from header
      * */
-    private function getBearerToken() {
+    public function getBearerToken() {
         $headers = $this->getAuthorizationHeader();
         // HEADER: Get the access token from the header
         if (!empty($headers)) {

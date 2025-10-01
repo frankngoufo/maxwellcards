@@ -95,6 +95,7 @@ class DB
       $_SESSION["lastInsertId"] = $this->dbh->lastInsertId();
     }
   }
+  
 
   /**
    * Order results returned 
